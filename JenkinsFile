@@ -1,0 +1,57 @@
+// This Jenkinsfile uses 'bat' to make it compatible with Windows agents
+
+pipeline {
+    agent any
+
+    environment {
+        // IMPORTANT: Make sure you have replaced these placeholder values
+        DOCKER_IMAGE = 'sarthaksharma19/my-node-app'
+        CONTAINER_NAME = 'my-node-app-container'
+        HOST_PORT = 8081
+        CONTAINER_PORT = 3000
+    }
+
+    stages {
+        stage('Pull Image') {
+            steps {
+                script {
+                    echo "Pulling Docker image: ${env.DOCKER_IMAGE}"
+                    // Use 'bat' for Windows environments
+                    bat "docker pull ${env.DOCKER_IMAGE}"
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running placeholder tests...'
+            }
+        }
+
+        stage('Deploy Application') {
+            steps {
+                script {
+                    echo 'Stopping and removing old container if it exists...'
+                    try {
+                        // Use 'bat' for Windows environments
+                        bat "docker stop ${env.CONTAINER_NAME}"
+                        bat "docker rm ${env.CONTAINER_NAME}"
+                    } catch (any) {
+                        echo "Container '${env.CONTAINER_NAME}' was not running or did not exist. This is normal on the first run."
+                    }
+
+                    echo "Deploying container from image: ${env.DOCKER_IMAGE}"
+                    // Use 'bat' for Windows environments
+                    // Note the added -e flag to set the environment variable
+                    bat "docker run -d --name ${env.CONTAINER_NAME} -p ${env.HOST_PORT}:${env.CONTAINER_PORT} -e MONGODB_URI='mongodb://host.docker.internal:27017/yourDatabaseName' ${env.DOCKER_IMAGE}"
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+    }
+}
