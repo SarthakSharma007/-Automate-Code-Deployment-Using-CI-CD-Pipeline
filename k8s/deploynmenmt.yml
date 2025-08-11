@@ -1,0 +1,21 @@
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-cicd-app-deployment # Changed name for clarity
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-cicd-app
+  template:
+    metadata:
+      labels:
+        app: my-cicd-app
+    spec:
+      containers:
+      - name: my-cicd-app-container
+        image: my-cicd-app:latest   # <-- This is your new image
+        imagePullPolicy: Never    # <-- Add this line. It tells K8s to use the local image and not look online.
+        ports:
+        - containerPort: 8000       # <-- The port from your Dockerfile

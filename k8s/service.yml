@@ -1,0 +1,13 @@
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-cicd-app-service
+spec:
+  type: NodePort
+  selector:
+    app: my-cicd-app      # <-- Make sure this matches the deployment's label
+  ports:
+    - protocol: TCP
+      port: 8000          # <-- The service port
+      targetPort: 8000    # <-- The container's port
