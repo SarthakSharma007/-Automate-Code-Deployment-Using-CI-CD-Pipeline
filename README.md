@@ -1,6 +1,6 @@
 # CI/CD Automation
 
-This repository contains the solution for **Task 1** of the DevOps Internship — automating code deployment using GitHub Actions and Docker Hub.
+This repository contains the solution for automating code deployment using GitHub Actions and Docker Hub.
 
 ---
 
